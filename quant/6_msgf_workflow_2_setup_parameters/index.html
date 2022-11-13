@@ -32,9 +32,11 @@
       var is_top_frame = false;
         
         var pageToc = [
-          {title: "2.1 MaxQuant Parameters", url: "#_top", children: [
+          {title: "2.1 Basic Parameters", url: "#_top", children: [
           ]},
-          {title: "2.1 Advanced Identification Mapping Parameters", url: "#21-advanced-identification-mapping-parameters", children: [
+          {title: "2.2 Modification Search Parameters", url: "#22-modification-search-parameters", children: [
+          ]},
+          {title: "2.3 Advanced Parameters", url: "#23-advanced-parameters", children: [
           ]},
         ];
 
@@ -82,47 +84,65 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 
     
 
-    <p>Once your spectrum and annotation files are added, you are ready to run the <strong>MaxQuant workflow</strong>.
-The numbers of input files which you have selected are summarized in the <strong>Basic Options</strong> box.
-Note that you can add and remove files for the input anytime before you submit the workflow.</p>
+    <p>Once your spectrum and database files are added, they will be summarized in the <strong>Basic Options</strong> box.
+It should be noted that you can add and remove files for the input anytime before you submit the workflow.
+Next, you would like to configure parameters for your <strong>MS-GF+ Ambiguity</strong> search from the workflow's user interface.</p>
 <p><center>
-<img alt="" src="../img/run_maxquant_workflow/maxquant_parameters.png" />
+<img alt="" src="../img/run_msgf_workflow/msgf_parameter_overview.png" />
 </center></p>
-<h3 id="21-maxquant-parameters">2.1 MaxQuant Parameters</h3>
-<p>This workflow supports inputting the most important and likely-to-change parameters when running MaxQuant software. 
-These parameters are placed in the <strong>MaxQuant Parameters</strong> box shown in the figure above. 
-It also supports uploading a parameter file if you prefer to upload your own parameter file. 
-The parameter file should be an .xml file and is typically obtained by <strong>Save parameters</strong> option from your personal MaxQuant software or from some existing MaxQuant run.
-You can further edit your on your computer and upload it to the workflow by the option of <strong>Parameter File .xml From Maxquant (optional)</strong>.
-Once you upload your parameter file, the workflow will automatically parse it and set the parameter values for the MaxQuant job as in the parameter file.
-And it should be noted that parameter values in the uploaded file have higher priority over ones set in the workflow view, e.g,
-if one parameter is set in both the uploaded file and some workflow input field, the final value would be as in the parameter file. </p>
+<h3 id="21-basic-parameters">2.1 Basic Parameters</h3>
+<p>This workflow supports a convenient interface for inputting the most important and likely-to-change parameters (depend on the mass spectrometry data) for your <strong>MS-GF+ Ambiguity</strong> search. 
+These parameter inputs are placed in the <code>Basic Options</code> box shown in the figure below.</p>
+<p>Specifically:</p>
+<ul>
+<li><code>Instrument</code>: Type of mass spectrometer used to generate the experimental spectra.</li>
+<li><code>Fragmentation Method</code>: Fragmentation method used - this parameter would be used to determine the scoring model.</li>
+<li><code>Cysteine Protecting Group</code>: Chemical modification used to treat the cysteine residues in the peptide (typically, a +57 Carbamidomethylation is used).</li>
+<li><code>Protease</code>: Choice of a proteolytic enzyme (Default: <code>Trypsin</code>).</li>
+<li><code>Number of Allowed</code> <sup>13</sup>C: Number of Carbon-13 allowed (Default: <code>1</code>).</li>
+<li><code>Number of Allowed Non-Enzymatic Termini</code>: Specifying the number of allowed non-enzymatic termini (Default: <code>1</code>).
+This parameter is used to apply the enzyme cleavage specificity rule when searching the database.
+For example, for <code>Trypsin</code> with <code>value = 0</code>, it will search for fully tryptic peptides only.
+Using <code>value = 1</code> or <code>2</code> can make the search slower.</li>
+<li><code>Parent Mass Tolerance</code>: Precursor mass tolerance in ppm or Da.
+It is recommended to use a tight tolerance rather than a loose tolerance (e.g. for Orbitrap data, 10ppm or 20ppm usually identifies more spectra than 50ppm).</li>
+<li><code>Isobaric Tag Type</code>: Isobaric tags used for quantification (Optional).</li>
+<li><code>Include Common Contaminants</code>: If selected, additionally search on a small database of common protein contaminants, such as trypsin (TRYP_PIG, TRYP_BOVIN), keratin (K22E_HUMAN, K22O_HUMAN, K2C1_HUMAN, K2C3_HUMAN, K2C7_HUMAN, K1C1_HUMAN),..</li>
+</ul>
 <p><center>
-<img alt="" src="../img/run_maxquant_workflow/maxquant_main_parameters.png" />
+<img alt="" src="../img/run_msgf_workflow/msgf_basic_parameters.png" />
 </center></p>
-<p>The workflow also includes other important parameters in the same <strong>MaxQuant Parameters</strong> box so that you can easily setup and start your workflow run.
-If you want to consider each file as generated by a separate experiment/sample, you can turn on the option of <strong>Run Every File As A Separate Sample</strong>.
-This can be helpful when you want that MaxQuant outputs result separately for each file, and does not perform tasks such as alignment, normalization between input files.
-You can also select different values in the options <strong>Align Features Between Runs</strong> and <strong>Match Between Runs</strong> if you prefer.
-More details on the two options can be found in <a href="https://pharmazie.uni-greifswald.de/storages/uni-greifswald/fakultaet/mnf/pharma/biotechno/dokumente/MaxQuant_Infos_and_Tutorial_07.pdf">the MaxQuant tutorial</a>.
-The last parameter <strong>Parent Mass Tolerance (ppm)</strong> on the box is to setup the precursor or parent mass tolerance - it should be a number in ppm.</p>
-<h3 id="21-advanced-identification-mapping-parameters">2.1 Advanced Identification Mapping Parameters</h3>
-<p>The box of <strong>Advanced Identification Mapping Parameters</strong> in the following figure supports settings for mapping features from MaxQuant to peptide sequences identified by database search tools.
-It should be noted that if you purely want to run and get quantitative result from MaxQuant software as usual, do not mind! This section is not for your need. 
-MaxQuant uses an integrated tool, <a href="http://www.coxdocs.org/doku.php?id=maxquant:andromeda">Andromeda</a> for peptide identification.
-However, our <strong>MaxQuant workflow</strong> gives you a flexible option that you use identification results from other tools to map to the feature.
-The workflow version 0.10.1 has supported two independent identification tools <a href="https://www.nature.com/articles/ncomms6277">MS-GF+</a> and <a href="">ModDecode</a>.</p>
+<h3 id="22-modification-search-parameters">2.2 Modification Search Parameters</h3>
+<p>If you consider modifications for your search, the box of <strong>Allowed Post-Translational Modifications</strong> would support this on all common as well as novel Post-Translational Modifications (PTMs), which you can define by yourself. 
+First, you can fill in a number in the head, the <code>Maximum Number of PTMs Permitted in a Single Peptide</code>.
+Note that if this value is large and multiple dynamic modifications are considered, the search will be slow (depending on size of the <code>fasta</code> files).
+The recommended value here are 1 or 2 (Default: <code>1</code>).</p>
+<p>There is a list of common modifications in the table. You can select modifications that you are considering.
+The <strong>MS-GF+ Ambiguity</strong> workflow also supports you adding novel or additional PTMs. You can add one after providing the mass (in <code>Da</code>) and the residues in the last row.
+The residues must be a string of abbreviation letters for standard amino acid (i.e. <code>ACDEFGHIKLMNOPQRSTUVWY</code>).
+You can also fill in this field with an asterisk <code>*</code> if any residue will fit in your experiment.</p>
 <p><center>
-<img alt="" src="../img/run_maxquant_workflow/maxquant_advanced_parameters.png" />
+<img alt="" src="../img/run_msgf_workflow/msgf_modification_parameters.png" />
 </center></p>
-<p>The identification mapping is after the MaxQuant's feature detection, 
-it would match the features to MS2 spectra based on the reported retention times and the theoretical m/z of the peptides identified.
-For using the mapping, you first need to have MS-GF+ or ModDecode's identification output file on MassIVE repository.
-Next, using <code>mzTab Identifications</code> and/or <code>ModDecode Identifications</code> options to navigate to the directories of the files on MassIVE,
-then select and add them into the workflow input. This process is similar to what you did to add spectrum and annotation files to the workflow.
-You can also refer the following figure as a graphical guideline for this task.
-The parameter of <code>MS1 Mapping Error (ppm)</code>, which is for the mapping tolerance between the measured and theoretical m/z (in ppm) is set as 50 by default.
-You can change to a lower (or higher) value if prefer a stricter (or looser) mapping in terms of the m/z difference.</p>
+<h3 id="23-advanced-parameters">2.3 Advanced Parameters</h3>
+<p>The box of <strong>Advanced Options</strong> in the following figure supports settings for the quality control and performance of your <strong>MS-GF+ Ambiguity</strong> search.
+If you are not interested in customizing your search result and speed, do not mind any parameter in this section and just leave them as default.
+Otherwise, please follow the following description for these parameters.</p>
+<p><center>
+<img alt="" src="../img/run_msgf_workflow/msgf_advanced_parameters.png" />
+</center></p>
+<ul>
+<li><code>Spectrum-Level FDR</code>: Peptide-Spectrum Match-level (PSM-level) false discovery rate used to filter results (Default: <code>0.01</code>, e.g. <code>1%</code> FDR).</li>
+<li><code>Precursor (peptide + charge)-Level FDR</code>: Precursor-level false discovery rate used to filter results (Default: <code>0.01</code>, e.g. <code>1%</code> FDR). 
+Note that a precursor is defined as a peptide sequence with a charge state.</li>
+<li><code>Protein-Level FDR (parsimony algorithm)</code>: Protein-level false discovery rate used to filter results (Default: <code>0.01</code>, e.g. <code>1%</code> FDR).</li>
+<li><code>Top k matches per spectrum</code>: Number of matches per spectrum to be reported (Default: 5).</li>
+<li><code>Search Parallelism</code>: Number of spectrum files to search in parallel. 
+This parameter is useful if your spectral dataset is large. Range of 1 to 200 (Default: 40).</li>
+<li><code>KL Filtering Threshold</code>: Spectra with a <a href="https://en.wikipedia.org/wiki/Kullback–Leibler_divergence">Kullback-Leibler (KL) divergence</a> above this value will be filtered out.
+If threshold is set to 0, no spectra are filtered out.</li>
+<li><code>Correct Precursor Masses</code>: Select <code>Yes</code> if you want to correct precursor masses during KL filtering.</li>
+</ul>
 
   <br>
     
